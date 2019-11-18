@@ -9,8 +9,8 @@ import 'splashlogout.dart';
 
 class Profile extends StatefulWidget {
   Position location;
-  String name, email, photo, token;
-  Profile(this.location, this.email, this.name, this.photo, @required this.token);
+  String name, email, photo, token, phone, gender, kota;
+  Profile(this.location, this.email, this.name, this.photo, @required this.token, this.gender, this.kota, this.phone);
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -238,7 +238,7 @@ class _ProfileState extends State<Profile> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(top: 20),
-                      child: Text("Alamat", style: TextStyle(
+                      child: Text("Kota", style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[400]
@@ -246,7 +246,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     Container(
                       padding: EdgeInsets.only(top:5),
-                      child: Text("Jl.Genuk Krajang II Kec.Candisari Semarang", style: TextStyle(
+                      child: Text("${widget.kota}", style: TextStyle(
                         fontSize: 16
                       ),),
                     ),
@@ -260,7 +260,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     Container(
                       padding: EdgeInsets.only(top:5),
-                      child: Text("082123456789", style: TextStyle(
+                      child: Text("${widget.phone}", style: TextStyle(
                         fontSize: 18
                       ),),
                     ),

@@ -45,25 +45,28 @@ class _SplashState extends State<Splash> {
   Future<SPBU> spbu;
   Position _currentPosition;
   SharedPreferences preferences;
+  Geolocator geolocator = Geolocator();
+
+  Future<Position> _getLocation() async{
+    var currentLocation;
+    try {
+      currentLocation = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      currentLocation = null;
+    }
+    return currentLocation;
+  }
 
   @override
   void initState() {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-
-    geolocator
-      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-      .then((Position position){
-        setState(() {
-          _currentPosition = position;
-          print(_currentPosition);
-        });
-      }).catchError((e){
-        print(e);
-      });
+    _getLocation().then((value){
+      _currentPosition = value;
+    });
       print(_currentPosition);
     // spbu = widget.fetchPost();
-          checkLoginStatus();
+
     super.initState();
+    checkLoginStatus();
   }
 
   checkLoginStatus() async{
@@ -112,7 +115,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   SharedPreferences preferences;
-  String _name, _email, _photo, _token, _kendaraan;
+  String _name, _email, _photo, _token, _kendaraan, _phone, _gender, _kota;
   
   Geolocator geolocator = Geolocator();
   Position _currentPosition;
@@ -124,6 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _email = preferences.getString('email');
     _token = preferences.getString('token');
     _kendaraan = preferences.getString('kendaraan');
+    _phone = preferences.getString('phone');
+    _gender = preferences.getString('gender');
+    _kota = preferences.getString('kota');
 
   }
 
@@ -162,7 +168,7 @@ Future<Position> _getLocation() async{
         body: TabBarView(
           // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            Home(location: _currentPosition,token: _token,name: _name,photo: _photo,email: _email,kendaraan: _kendaraan),
+            Home(location: widget.locationNow,token: _token,name: _name,photo: _photo,email: _email,kendaraan: _kendaraan, kota: _kota, gender: _gender, phone: _phone,),
     Produk( location: _currentPosition,token: _token,),
     Riwayat(_token),
     Konsultasi(),

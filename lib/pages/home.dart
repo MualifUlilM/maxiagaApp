@@ -9,8 +9,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maxiaga/models/articleModels.dart';
-import 'package:maxiaga/models/kendaraan.dart';
 import 'package:maxiaga/pages/article.dart';
 import 'package:maxiaga/pages/orderbensin.dart';
 import 'package:maxiaga/pages/profile.dart';
@@ -18,6 +16,7 @@ import 'package:maxiaga/pages/riwayat.dart';
 import 'package:maxiaga/pages/servis.dart';
 import 'package:maxiaga/models/spbu.dart';
 import 'package:http/http.dart' as http;
+import 'package:maxiaga/pages/tambalban.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
@@ -31,7 +30,8 @@ Future<SPBU_API> _getSpbu(Position location, String token) async {
   print('awal');
   print(jsonData['data']);
   if (data.statusCode == 200) {
-    // print(jsonData['data']);
+    print(data.statusCode);
+    print(jsonData);
     return SPBU_API.fromJson(jsonData);
   } else {
     throw Exception('Failed to load daata');
@@ -39,10 +39,10 @@ Future<SPBU_API> _getSpbu(Position location, String token) async {
 }
 
 class Home extends StatefulWidget {
-  String token,name,email,photo, kendaraan;
+  String token,name,email,photo, kendaraan, phone, gender, kota;
   Position location;
   Future<SPBU_API> x;
-  Home({Key key, @required this.location, this.x, this.token, this.name, this.photo, this.email, this.kendaraan}) : super(key: key);
+  Home({Key key, @required this.location, this.x, this.token, this.name, this.photo, this.email, this.kendaraan, this.gender, this.kota, this.phone}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -51,7 +51,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var res;
   SharedPreferences preferences;
-  String name, email, photo, token;
+  String name, email, photo, token, phone, gender, kota;
   List<String> kendaraan;
   @override
   Position _currentPosition;
@@ -74,21 +74,34 @@ class _HomeState extends State<Home> {
     photo = preferences.getString('photo');
     // kendaraan = preferences.getStringList('kendaraan');
     token = preferences.getString('token');
+    phone = preferences.getString('phone');
+    gender = preferences.getString('gender');
+    kota = preferences.getString('kota');
   }
 
   @override
   void initState() {
-    print('token');
-    setPreference();
-    print(widget.token);
+
     super.initState();
+    // kendaraan = json.decode(widget.kendaraan['id']);
     _getLocation().then((position) {
       userLocation = position;
+      setState(() {
+        print(widget.token);
+        res = _getSpbu(widget.location == null ? userLocation : widget.location, token);
+        print(res);
+      });
+      print('ini user lokasi $userLocation');
+
     });
-    // kendaraan = json.decode(widget.kendaraan['id']);
-    setState(() {
-      res = _getSpbu(widget.location, widget.token);
-    });
+    print('token');
+    setPreference();
+    print('lokasi dari widget ${widget.location}');
+    print('lokasi dari userlocation $userLocation');
+    print('lokasi dari widget dari current position $_currentPosition');
+//    setState(() {
+//      res = _getSpbu(widget.location, widget.token);
+//    });
   }
 
   Future<Position> _getLocation() async {
@@ -118,12 +131,10 @@ class _HomeState extends State<Home> {
         future: res,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done && snapshot.hasData == true) {
-              // spbu = snapshot.data.data;
-              // print(spbu[0].address);
-            if (snapshot.data.data.length > 0) {
+            if (snapshot.data.api_status == 1 && snapshot.data.data.length > 0) {
               for (var i = snapshot.data.data.length - 1; i >= 0; i--) {
               spbuPoint =
-                  LatLng(snapshot.data.data[i].lat, snapshot.data.data[i].long);
+                  LatLng(snapshot.data.data[i].lat, snapshot.data.data[i].long);  
               // print(spbuPoint);
               SPBU spbuData = snapshot.data.data[i];
               print(spbuData.name);
@@ -384,7 +395,7 @@ class _HomeState extends State<Home> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Profile(widget.location, widget.email, widget.name, widget.photo, widget.token)));
+                      builder: (context) => Profile(widget.location, widget.email, widget.name, widget.photo, widget.token, widget.gender, widget.kota, widget.phone)));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -438,10 +449,7 @@ class _HomeState extends State<Home> {
         title: 'Servis',
       ),
       OrderBensin(widget.location),
-      Servis(
-        location: widget.location,
-        title: 'Servis',
-      ),
+      OrderTambalban(widget.location, widget.token)
 
     ];
 

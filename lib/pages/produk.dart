@@ -128,7 +128,7 @@ class _ProdukState extends State<Produk> {
                             ),
                             onPressed: (){
                               print(snapshot.data.data[i].id);
-                              _getProduct(i, _token).then((value){
+                              _getProduct(snapshot.data.data[i].id, _token).then((value){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>SPBUproduk(nama: '${snapshot.data.data[i].name}',alamat: snapshot.data.data[i].address,data: value)));
                               });
                             },

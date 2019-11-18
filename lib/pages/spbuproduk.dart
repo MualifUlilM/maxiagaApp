@@ -170,7 +170,7 @@ class _SPBUprodukState extends State<SPBUproduk> {
                   ),
                   onPressed: (){
                     print("${widget.data.data[i].name} is clicked");
-                    showAlertDialog(context, widget.data.data[i].name, widget.data.data[i].description);
+                    showAlertDialog(context, widget.data.data[i].name, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac ultrices felis, et condimentum augue. Nam consequat, urna sed ullamcorper consectetur, risus libero mattis dolor, sed suscipit dolor ipsum nec sem.');
                   },
               ),
             );

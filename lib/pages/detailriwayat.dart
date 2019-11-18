@@ -39,15 +39,6 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
         backgroundColor: Colors.white,
         flexibleSpace: FlexibleSpaceBar(),
       ),
-      // floatingActionButton: Container(
-      //   width: double.infinity,
-      //   margin: EdgeInsets.symmetric(horizontal: 20),
-      //   height: 60,
-      //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white, border: Border.all(color: Colors.red)),
-      //   child: FlatButton(
-      //     child: Text('Konfirmasi'),
-      //   ),
-      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: FutureBuilder(
         future: _getDetailsTransaction(widget.id, widget.token),
@@ -58,6 +49,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
           // crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
+              width: double.infinity,
               height: MediaQuery.of(context).size.height / 3.5,
               color: Colors.red,
               child: Column(
@@ -166,71 +158,3 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
     );
   }
 }
-
-// SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.end,
-//           children: <Widget>[
-//             Container(
-//               height: 120,
-//               color: Colors.red,
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: <Widget>[
-//                   Container(
-//                     child: Text(
-//                       'Pesananmu dari : ${snapshot.data.mx_ms_outlets_name}',
-//                       style: TextStyle(color: Colors.white, fontSize: 18),
-//                       maxLines: 1,
-//                     ),
-//                     padding: EdgeInsets.all(10),
-//                   ),
-//                   Container(
-//                     child: Text('Akan di antar ke : ${snapshot.data.address}',
-//                         style: TextStyle(color: Colors.white, fontSize: 18),
-//                         maxLines: 1),
-//                     padding: EdgeInsets.all(10),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Column(
-//               children: <Widget>[
-//                 Container(
-//                   padding: EdgeInsets.all(20),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: <Widget>[
-//                       Text(
-//                         snapshot.data.jenis,
-//                         style: TextStyle(fontSize: 18),
-//                       ),
-//                       Text(
-//                         '${snapshot.data.total}',
-//                         style: TextStyle(fontSize: 18),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Container(
-//                     padding: EdgeInsets.symmetric(horizontal: 20),
-//                     child: Divider(
-//                       color: Colors.black,
-//                       thickness: 1,
-//                     )),
-//               ],
-//             ),
-//             Container(
-//               padding: EdgeInsets.symmetric(horizontal:20),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.end,
-//                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: <Widget>[
-//                     Container(child: Text('Total : \t${snapshot.data.total}',style: TextStyle(fontSize: 18),),padding: EdgeInsets.symmetric(vertical: 5),),
-//                         Container(child: Text('Biaya Pengiriman : \t${snapshot.data.ship}',style: TextStyle(fontSize: 18),), padding: EdgeInsets.symmetric(vertical: 5),),],
-//               ),
-//             )
-//           ],
-//         ),
-//       );

@@ -48,7 +48,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   BuildContext _ctx;
-  List<Kendaraan> kendaraan;
+  List<String> kendaraan;
   Color  obsecureColor = Colors.black;
   bool _isLoading = false;
   final formKey = new GlobalKey<FormState>();
@@ -109,9 +109,17 @@ signIn(String email, pass, Position location)async{
       preferences.setString("name", jsonRes['name']);
       preferences.setString("photo", jsonRes['photo']);
       preferences.setString("email", jsonRes['email']);
-      preferences.setString("kendaraan", jsonRes['kendaraan'].toString());
+      preferences.setString("phone", jsonRes['phone']);
+      preferences.setString("gender", jsonRes['gender']);
+      preferences.setString("kota", jsonRes['kota']);
+      
+      // for (var i = 0; i < jsonRes['kendaraan'].length; i++) {
+      //   // kendaraan.add(jsonRes['kendaraan'].toString());
+      //   print(kendaraan.length);
+      // }
+      preferences.setStringList("kendaraan", kendaraan);
       print(preferences.getString('kendaraan'));
-      downloadImage(preferences.getString('photo'));
+      downloadImage(preferences.getString('gender'));
       print(preferences.get("token"));
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>SplashLogin(jsonRes['token'])), (Route<dynamic> route)=>false);
     }else{

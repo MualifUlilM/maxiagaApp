@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
   @override
@@ -40,7 +43,26 @@ Color obsecureColor1 = Colors.black;
     });
   }
 
-  
+  Future _postRegister(String name, File photo, String email, String password, String confirm) async {
+
+    String baseImage64 = base64Encode(photo.readAsBytesSync());
+
+    var res = await http.post('http://maxiaga.com/backend/api/post_signup',body: {
+      'name': name,
+      'photo':baseImage64,
+      'email':email,
+      'password':password,
+      'password_confirmation':confirm,
+    });
+    var jsonRes;
+  if (res.statusCode == 200) {
+    jsonRes = json.decode(res.body);
+    print(jsonRes);
+  } else {
+    throw Exception('Cannot Post Data');
+  }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +236,10 @@ Color obsecureColor1 = Colors.black;
                         ),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            print('daftar');
+                            print(_image);
+                            _postRegister(_nameController.text, _image, _emailController.text, _passwordlController.text, _passwordConfirmationController.text).then((value){
+                              print(value);
+                            });
                           }
                         },
                       )),

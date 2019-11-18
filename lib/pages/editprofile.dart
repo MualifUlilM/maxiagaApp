@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:maxiaga/pages/login.dart';
 
 class EditProfile extends StatefulWidget {
+  String name, email, photo, token, phone, gender, kota;
+  EditProfile({this.name, this.email, this.gender, this.kota, this.phone, this.photo, this.token});
   @override
   _EditProfileState createState() => _EditProfileState();
 }
@@ -61,7 +63,9 @@ class _EditProfileState extends State<EditProfile> {
                     child: Text("Nama"),
                   ),
                   Flexible(
-                    child: TextFormField(),
+                    child: TextFormField(
+                      initialValue: widget.name,
+                    ),
                   )
                 ],
               ),
@@ -95,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
                               },
                               items: <String>['Laki-Laki','Perempuan'].map((String value){
                                   return new DropdownMenuItem(
-                                    value: value,
+                                    value: value  ,
                                     child: new Text(value),
                                   );
                               }).toList(),
@@ -135,7 +139,9 @@ class _EditProfileState extends State<EditProfile> {
                     child: Text("Telepon"),
                   ),
                   Flexible(
-                    child: TextFormField(),
+                    child: TextFormField(
+                      
+                    ),
                   )
                 ],
               ),
