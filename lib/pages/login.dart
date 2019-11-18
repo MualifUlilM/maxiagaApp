@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:maxiaga/main.dart';
 import 'package:maxiaga/models/kendaraan.dart';
+import 'package:maxiaga/models/spbu.dart';
 // import 'package:maxiaga/auth.dart';
 import 'package:maxiaga/models/user.dart';
 import 'package:maxiaga/pages/register.dart';
@@ -14,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:maxiaga/data/database_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_downloader/image_downloader.dart';
-
+import 'package:path_provider/path_provider.dart';
 
 class Login extends StatefulWidget {
   Position location;
@@ -48,7 +51,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   BuildContext _ctx;
-  List<String> kendaraan;
+  List kendaraan;
   Color  obsecureColor = Colors.black;
   bool _isLoading = false;
   final formKey = new GlobalKey<FormState>();
@@ -58,29 +61,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = new TextEditingController();
   bool loginGagal = false;
 
-  void _showSnackBar(String text){
-    scaffoldKey.currentState
-      .showSnackBar(new SnackBar(content: new Text(text),));
-  }
-
-  @override
-  void downloadImage(String url) async {
-    try {
-  // Saved with this method.
-  var imageId = await ImageDownloader.downloadImage("$url");
-  if (imageId == null) {
-    return;
-  }
-
-  // Below is a method of obtaining saved image information.
-  var fileName = await ImageDownloader.findName(imageId);
-  var path = await ImageDownloader.findPath(imageId);
-  var size = await ImageDownloader.findByteSize(imageId);
-  var mimeType = await ImageDownloader.findMimeType(imageId);
-} on Exception catch (error) {
-  print(error);
-}
-  }
   bool _obsecure = true;
   void _setObsecure(){
     setState(() {
@@ -89,6 +69,15 @@ class _LoginPageState extends State<LoginPage> {
         obsecureColor = Colors.black;
       }else{obsecureColor = Colors.red;}
     });
+  }
+
+  List<String> _mapKendaraanData(List<dynamic> kendaraan) {
+    try {
+      var res = kendaraan.map((v)=>json.encode(v)).toList();
+      return res;
+    }catch(err){
+      return [];
+    }
   }
 
 signIn(String email, pass, Position location)async{
@@ -112,14 +101,11 @@ signIn(String email, pass, Position location)async{
       preferences.setString("phone", jsonRes['phone']);
       preferences.setString("gender", jsonRes['gender']);
       preferences.setString("kota", jsonRes['kota']);
-      
-      // for (var i = 0; i < jsonRes['kendaraan'].length; i++) {
-      //   // kendaraan.add(jsonRes['kendaraan'].toString());
-      //   print(kendaraan.length);
-      // }
-      preferences.setStringList("kendaraan", kendaraan);
-      print(preferences.getString('kendaraan'));
-      downloadImage(preferences.getString('gender'));
+
+       preferences.setStringList('kendaraan', _mapKendaraanData(jsonRes['kendaraan']));
+//      preferences.setStringList("kendaraan", kendaraan);
+//      print(preferences.getLisString('kendaraan'));
+      print(preferences.getStringList('kendaraan'));
       print(preferences.get("token"));
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>SplashLogin(jsonRes['token'])), (Route<dynamic> route)=>false);
     }else{
@@ -153,11 +139,12 @@ signIn(String email, pass, Position location)async{
                 // color: Colors.red
               ),
               child: Center(
-                child: Text("MAXIAGA",style: TextStyle(
-                  fontSize: 28,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold
-                ),),
+//                child: Text("MAXIAGA",style: TextStyle(
+//                  fontSize: 28,
+//                  color: Colors.white,
+//                  fontWeight: FontWeight.bold
+//                ),),
+              child: Container(height: 120, width: 230,child: Image.asset('lib/assets/images/maxiaga_putih.png'),),
               ),
             ),
             Container(

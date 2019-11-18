@@ -17,6 +17,7 @@ class _RegisterState extends State<Register> {
   final _nameController = TextEditingController();
   final _passwordlController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
+  final _kotaController = TextEditingController();
   
   Color obsecureColor = Colors.black;
 
@@ -55,6 +56,7 @@ Color obsecureColor1 = Colors.black;
       'password_confirmation':confirm,
     });
     var jsonRes;
+    print('executed');
   if (res.statusCode == 200) {
     jsonRes = json.decode(res.body);
     print(jsonRes);
@@ -164,7 +166,7 @@ Color obsecureColor1 = Colors.black;
                   ),
                   Container(
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: 'Nama'),
+                      decoration: InputDecoration(labelText: 'Nama', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                       controller: _nameController,
                       validator: (val){
                         return val.isEmpty ? 'Nama Kosong':null;
@@ -174,7 +176,7 @@ Color obsecureColor1 = Colors.black;
                   Container(
                     child: TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(labelText: 'Email'),
+                      decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                       validator: (val){
                         return val.isEmpty ? 'Email Kosong':null;
                       },
@@ -182,9 +184,18 @@ Color obsecureColor1 = Colors.black;
                   ),
                   Container(
                     child: TextFormField(
+                      controller: _kotaController,
+                      decoration: InputDecoration(labelText: 'Kota', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      validator: (val){
+                        return val.isEmpty ? 'Kota Kosong':null;
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: TextFormField(
                       controller: _passwordlController,
                       obscureText: _obsecure,
-                      decoration: InputDecoration(suffixIcon: FlatButton(child: Icon(Icons.remove_red_eye, color: obsecureColor,),onPressed: (){_setObsecure();},),labelText: 'Password'),
+                      decoration: InputDecoration(suffixIcon: FlatButton(child: Icon(Icons.remove_red_eye, color: obsecureColor,),onPressed: (){_setObsecure();},),labelText: 'Password', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                       
                       validator: (val){
                         if (val.isEmpty) {
@@ -203,7 +214,7 @@ Color obsecureColor1 = Colors.black;
                     child: TextFormField(
                       controller: _passwordConfirmationController,
                       obscureText: _obsecure1,
-                      decoration: InputDecoration(suffixIcon: FlatButton(child: Icon(Icons.remove_red_eye, color: obsecureColor1,),onPressed: (){_setObsecure1();},),labelText: 'Konfirmasi Password '),
+                      decoration: InputDecoration(suffixIcon: FlatButton(child: Icon(Icons.remove_red_eye, color: obsecureColor1,),onPressed: (){_setObsecure1();},),labelText: 'Konfirmasi Password ', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                       
                       validator: (val){
                         if (val.isEmpty) {
@@ -238,7 +249,7 @@ Color obsecureColor1 = Colors.black;
                           if (_formKey.currentState.validate()) {
                             print(_image);
                             _postRegister(_nameController.text, _image, _emailController.text, _passwordlController.text, _passwordConfirmationController.text).then((value){
-                              print(value);
+                              print(value['api_status']);
                             });
                           }
                         },

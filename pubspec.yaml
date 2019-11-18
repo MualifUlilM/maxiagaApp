@@ -45,6 +45,7 @@ dependencies:
   image_downloader:
   image_picker_saver:
   flutter_redux:
+  dio:
 
 dev_dependencies:
   flutter_test:

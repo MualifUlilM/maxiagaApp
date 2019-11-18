@@ -1,6 +1,7 @@
 import 'package:expandable_card/expandable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:maxiaga/models/kendaraan.dart';
 import 'package:maxiaga/pages/editprofile.dart';
 import 'package:maxiaga/pages/tambahkendaraan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,8 @@ import 'splashlogout.dart';
 class Profile extends StatefulWidget {
   Position location;
   String name, email, photo, token, phone, gender, kota;
-  Profile(this.location, this.email, this.name, this.photo, @required this.token, this.gender, this.kota, this.phone);
+  var kendaraan;
+  Profile(this.location, this.email, this.name, this.photo, @required this.token, this.gender, this.kota, this.phone, this.kendaraan);
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -32,6 +34,7 @@ class _ProfileState extends State<Profile> {
     // TODO: implement initState
     super.initState();
     setPreference();
+    print(widget.kendaraan);
     }
   
   @override
@@ -156,7 +159,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TambahKendaraan()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TambahKendaraan(token: widget.token,)));
                   },
                 ),
               ),
@@ -168,7 +171,7 @@ class _ProfileState extends State<Profile> {
             child: Expanded(
             child: ListView.separated(
             separatorBuilder: (BuildContext context, int index)=>Divider(color: Colors.white,),
-            itemCount: kendaraan.length,
+            itemCount: widget.kendaraan.length,
             // shrinkWrap: true,
             itemBuilder: (context, int index){
               return Container(
@@ -178,9 +181,9 @@ class _ProfileState extends State<Profile> {
                     Container(
                       margin: EdgeInsets.only(right: 30),
                       width: 30,
-                      child: iconKendaraan[index],
+                      child: widget.kendaraan[index]['type'] == '1' ? Image.asset('lib/assets/images/motorputih.png',scale: 3,) : Image.asset('lib/assets/images/mobilputih.png',scale: 3,),
                     ),
-                    Text(kendaraan[index],style: TextStyle(
+                    Text(widget.kendaraan[index]['brand'],style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   // fontWeight: FontWeight.bold

@@ -45,7 +45,7 @@ class _OrderTambalbanState extends State<OrderTambalban> {
     print(address.first.addressLine);
     var res = await http.post('http://maxiaga.com/backend/api/post_order', body: {
       'token':token,
-      'address':address.first.toString(),
+      'address':address.first.addressLine,
       'lng':location.longitude.toString(),
       'lat':location.latitude.toString(),
       'id_mx_ms_category_service': id.toString(),

@@ -44,6 +44,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
         future: _getDetailsTransaction(widget.id, widget.token),
         builder: (context, snapshot){
           if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+            print(snapshot.data['address']);
             return SingleChildScrollView(
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.end,
@@ -57,7 +58,12 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    child: Text(
+                    child:  snapshot.data['mx_ms_outlets_name'] == null ? Text(
+              'Pesananmu dari : Menuggu',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+                maxLines: 1,
+              ):
+                    Text(
                       'Pesananmu dari : ${snapshot.data['mx_ms_outlets_name']}',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                       maxLines: 1,
@@ -140,7 +146,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                       ],
                     ),padding: EdgeInsets.symmetric(vertical: 5),),  
                       ],
-              ),
+                  ),
                     ],
                   ),
                 );

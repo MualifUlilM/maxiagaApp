@@ -9,6 +9,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maxiaga/models/kendaraan.dart';
 import 'package:maxiaga/pages/article.dart';
 import 'package:maxiaga/pages/orderbensin.dart';
 import 'package:maxiaga/pages/profile.dart';
@@ -21,6 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:flutter_html_view/flutter_html_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 
 Future<SPBU_API> _getSpbu(Position location, String token) async {
@@ -39,9 +42,10 @@ Future<SPBU_API> _getSpbu(Position location, String token) async {
 }
 
 class Home extends StatefulWidget {
-  String token,name,email,photo, kendaraan, phone, gender, kota;
+  String token,name,email,photo, phone, gender, kota;
   Position location;
   Future<SPBU_API> x;
+  var kendaraan;
   Home({Key key, @required this.location, this.x, this.token, this.name, this.photo, this.email, this.kendaraan, this.gender, this.kota, this.phone}) : super(key: key);
 
   @override
@@ -91,7 +95,7 @@ class _HomeState extends State<Home> {
         res = _getSpbu(widget.location == null ? userLocation : widget.location, token);
         print(res);
       });
-      print('ini user lokasi $userLocation');
+      print('ini user lokasi ${widget.kendaraan}');
 
     });
     print('token');
@@ -356,8 +360,11 @@ class _HomeState extends State<Home> {
                                 ],
                               ),
                             ),
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Article("${snapshot.data[i]['title']['rendered']}", "${snapshot.data[i]['jetpack_featured_media_url']}", "${snapshot.data[i]['content']['rendered']}")));
+                            onPressed: () async {
+//                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Article("${snapshot.data[i]['title']['rendered']}", "${snapshot.data[i]['jetpack_featured_media_url']}", "${snapshot.data[i]['content']['rendered']}")));
+                                if(await canLaunch('${snapshot.data[i]['link']}')){
+                                  await launch('${snapshot.data[i]['link']}');
+                                }
                             },
                             )
                           );
@@ -372,6 +379,14 @@ class _HomeState extends State<Home> {
   }
 
 
+  ImageProvider buildImg(){
+    if(photo == null){
+      return AssetImage('lib/assets/images/avatar.png');
+    }else{
+      return NetworkImage(photo);
+    }
+  }
+
   Container _getBackground() {
     return Container(
       padding: EdgeInsets.fromLTRB(
@@ -385,17 +400,22 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            "MAXIAGA",
-            style: TextStyle(fontSize: 28, color: Colors.white),
-          ),
+//          Text(
+//            "MAXIAGA",
+//            style: TextStyle(fontSize: 28, color: Colors.white),
+//          ),
+        Container(
+          height: 50,
+
+          child: Image.asset('lib/assets/images/maxiaga_putih.png',),
+        ),
           FlatButton(
             onPressed: () {
               print(widget.email);
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Profile(widget.location, widget.email, widget.name, widget.photo, widget.token, widget.gender, widget.kota, widget.phone)));
+                      builder: (context) => Profile(widget.location, widget.email, widget.name, widget.photo, widget.token, widget.gender, widget.kota, widget.phone, widget.kendaraan)));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -415,7 +435,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 CircleAvatar(
-                  backgroundImage: AssetImage('lib/assets/images/avatar.png'),
+                  backgroundImage: buildImg(),
                   // backgroundImage: widget.photo.isEmpty?AssetImage('lib/assets/images/avatar.png'):NetworkImage(widget.photo) ,
                   radius: MediaQuery.of(context).size.width / 10,
                   backgroundColor: Colors.white,

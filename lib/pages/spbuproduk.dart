@@ -99,7 +99,7 @@ class _SPBUprodukState extends State<SPBUproduk> {
           // splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Pesanan()));
+//          Navigator.push(context, MaterialPageRoute(builder: (context)=>Pesanan()));
         },
         child: Container(
           height: 60,
@@ -108,7 +108,7 @@ class _SPBUprodukState extends State<SPBUproduk> {
             borderRadius: BorderRadius.circular(8)
           ),
           child: Center(
-            child: Text("Pesan", 
+            child: Text("Coming soon",
             style: TextStyle(
               fontSize: 22,
               color: Colors.white,
@@ -168,10 +168,11 @@ class _SPBUprodukState extends State<SPBUproduk> {
                       )
                     ],
                   ),
-                  onPressed: (){
-                    print("${widget.data.data[i].name} is clicked");
-                    showAlertDialog(context, widget.data.data[i].name, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac ultrices felis, et condimentum augue. Nam consequat, urna sed ullamcorper consectetur, risus libero mattis dolor, sed suscipit dolor ipsum nec sem.');
-                  },
+//                  onPressed: (){
+//                    print("${widget.data.data[i].name} is clicked");
+//                    showAlertDialog(context, widget.data.data[i].name, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac ultrices felis, et condimentum augue. Nam consequat, urna sed ullamcorper consectetur, risus libero mattis dolor, sed suscipit dolor ipsum nec sem.');
+//                  },
+              onPressed: null,
               ),
             );
           }),

@@ -5,7 +5,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:maxiaga/models/userdata.dart';
+//import 'package:maxiaga/models/userdata.dart';
+import 'package:maxiaga/models/kendaraan.dart';
 import 'package:maxiaga/pages/home.dart';
 import 'package:maxiaga/pages/login.dart';
 import 'package:maxiaga/pages/riwayat.dart';
@@ -15,6 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:maxiaga/models/spbu.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -83,13 +86,15 @@ class _SplashState extends State<Splash> {
     return SplashScreen(
       seconds: 3,
       navigateAfterSeconds: Login(_currentPosition),
-      title: Text("MAXIAGA",
-        style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
+//      title: Text("MAXIAGA",
+//        style: TextStyle(
+//          fontSize: 28,
+//          fontWeight: FontWeight.bold,
+//          color: Colors.white,
+//        ),
+//      ),
+      image: Image.asset('lib/assets/images/maxiaga_putih.png',),
+      photoSize: 120,
       backgroundColor: Colors.red,
       styleTextUnderTheLoader: new TextStyle(),
       // loaderColor: Colors.white,
@@ -107,6 +112,7 @@ class MyHomePage extends StatefulWidget {
   Position locationNow;
   final Future<SPBU> spbu;
 
+  Map<String, dynamic> fileContent;
 
 
   @override
@@ -115,10 +121,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   SharedPreferences preferences;
-  String _name, _email, _photo, _token, _kendaraan, _phone, _gender, _kota;
-  
+  String _name, _email, _photo, _token,  _phone, _gender, _kota;
+  var _kendaraan;
   Geolocator geolocator = Geolocator();
   Position _currentPosition;
+
+  _decodeTodoData(List<String> todos) {
+    print('Executed');
+    var result = todos.map((v) => json.decode(v)).toList();
+    //Transforming the Json into Array<Todo>
+    print(result);
+    var todObjects = result.map((v) => Kendaraan.fromJson(v)).toList();
+    print(result.map);
+    return result;
+  }
+
 
   void _getPreferences()async{
     preferences = await SharedPreferences.getInstance();
@@ -126,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _photo = preferences.getString('photo');
     _email = preferences.getString('email');
     _token = preferences.getString('token');
-    _kendaraan = preferences.getString('kendaraan');
+    _kendaraan = _decodeTodoData(preferences.getStringList('kendaraan'));
     _phone = preferences.getString('phone');
     _gender = preferences.getString('gender');
     _kota = preferences.getString('kota');
@@ -143,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _currentPosition = value;
       });
     });
+    print('kendaraan $_kendaraan');
     super.initState();
     
   }

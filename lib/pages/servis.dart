@@ -50,7 +50,6 @@ void initState() {
     print(widget.spbu);
     print('asdasd');
     // print(widget.spbu[1].address);
-    file == null;
 }
 
 void onChangeValue(SPBU spbuPilih){
@@ -130,139 +129,176 @@ Future getImage() async {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: ListView(
-          // physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            FlatButton(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(3)
-                ),
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Lokasi"),
-                    Icon(Icons.location_on)
-                  ],
-                ),
-              ),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Maps(location: widget.location,)));
-              },
-            ),
-
-            FutureBuilder<SPBU_API>(
-              future: widget.spbu,
-              builder: (context, snapshot){
-                print('ini snapshot');
-                var value = snapshot.data.data[0].name;
-                return Container(
-                  height: 50,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
-                  color: Colors.grey[300],
-                  child: DropdownButton<String>(
-                    value: value,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    onChanged: (newValue){
-                      setState(() {
-                        value = newValue;
-                      });
-                    },
-                  ),
-                );
-              },
-            ),
-
-            FutureBuilder<SPBU_API>(
-              future: widget.spbu,
-              builder: (context, snapshot){
-                print('ini snapshot');
-                var value = snapshot.data.data[0].name;
-                return Container(
-                  height: 50,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
-                  color: Colors.grey[300],
-                  child: DropdownButton<String>(
-                    value: value,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    onChanged: (newValue){
-                      setState(() {
-                        value = newValue;
-                      });
-                    },
-                  ),
-                );
-              },
-            ),
-
-            Container(
-              decoration: BoxDecoration(color: Colors.grey[300]),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(15),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Colors.grey[300],
-                  hintText: 'Alamat Detail',
-                ),
-              ),
-            ),
-            Container(
-              height: 130,
-              decoration: BoxDecoration(color: Colors.grey[300]),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              margin: EdgeInsets.only(left:15, right: 15, bottom: 10),
-              child: TextField(
-                maxLines: 100,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Colors.grey[300],
-                  hintText: 'Keluhan',
-                ),
-              ),
-            ),
-            Text("Tambah Gambar"),
-            Row(
+      body: Stack(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: ListView(
+              physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(3)),
-                  child: Center(child: buildImage() )
-                ),
                 FlatButton(
                   child: Container(
-                  margin: EdgeInsets.all(20),
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(3)),
-                  child: Center(child: Icon(Icons.add_a_photo, color: Colors.white,),)
+                    height: 40,
+                    decoration: BoxDecoration(color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(3)
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("Lokasi"),
+                        Icon(Icons.location_on)
+                      ],
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Maps(location: widget.location,)));
+                  },
                 ),
-                onPressed: (){
-                  getImage();
-                },
+
+//            FutureBuilder<SPBU_API>(
+//              future: widget.spbu,
+//              builder: (context, snapshot){
+//                if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
+//                  var value = snapshot.data.data[0].name;
+//                  return Container(
+//                    height: 50,
+//                    padding: EdgeInsets.all(10),
+//                    margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
+//                    color: Colors.grey[300],
+//                    child: DropdownButton<String>(
+//                      value: value,
+//                      icon: Icon(Icons.arrow_drop_down),
+//                      iconSize: 24,
+//                      onChanged: (newValue){
+//                        setState(() {
+//                          value = newValue;
+//                        });
+//                      },
+//                    ),
+//                  );
+//                }
+//              },
+//            ),
+                Container(
+                  height: 50,
+//              padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                  color: Colors.grey[300],
+                  child: ListTile(
+                    trailing: Icon(Icons.arrow_drop_down),
+                  ),
+
                 ),
-                
-              ],
-            ),
-            Container(
+//            FutureBuilder<SPBU_API>(
+//              future: widget.spbu,
+//              builder: (context, snapshot){
+//                print('ini snapshot');
+//                if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
+//                  var value = snapshot.data.data[0].name;
+//                  return Container(
+//                    height: 50,
+//                    padding: EdgeInsets.all(10),
+//                    margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
+//                    color: Colors.grey[300],
+//                    child: DropdownButton<String>(
+//                      value: value,
+//                      icon: Icon(Icons.arrow_drop_down),
+//                      iconSize: 24,
+//                      onChanged: (newValue){
+//                        setState(() {
+//                          value = newValue;
+//                        });
+//                      },
+//                    ),
+//                  );
+//                }
+//              },
+//            ),
+
+                Container(
+                  height: 50,
+//              padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                  color: Colors.grey[300],
+                  child: ListTile(
+                    trailing: Icon(Icons.arrow_drop_down),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(color: Colors.grey[300]),
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.all(15),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      fillColor: Colors.grey[300],
+                      hintText: 'Alamat Detail',
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 130,
+                  decoration: BoxDecoration(color: Colors.grey[300]),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.only(left:15, right: 15, bottom: 10),
+                  child: TextField(
+                    maxLines: 100,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      fillColor: Colors.grey[300],
+                      hintText: 'Keluhan',
+                    ),
+                  ),
+                ),
+                Text("Tambah Gambar"),
+                Row(
+                  children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(3)),
+                        child: Center(child: buildImage() )
+                    ),
+                    FlatButton(
+                      child: Container(
+                          margin: EdgeInsets.all(20),
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(3)),
+                          child: Center(child: Icon(Icons.add_a_photo, color: Colors.white,),)
+                      ),
+                      onPressed: (){
+                        getImage();
+                      },
+                    ),
+
+                  ],
+                ),
+                Container(
                   margin: EdgeInsets.only(top: 20, bottom: 20),
                   height: 60,
                   // width: 120,
                   decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3)),
                   child: Center(child: Text("Kirim", style: TextStyle(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),),
                 ),
-          ],
-        ),
+              ],
+            ),
+          ),
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(color: Colors.grey.withOpacity(0.5)),
+            child: Center(
+              child: Text('Coming Soon', style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: 28
+              ),),
+            ),
+          )
+        ],
       ),
       
     );
