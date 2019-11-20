@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:compressimage/compressimage.dart';
 import 'package:maxiaga/pages/login.dart';
 import 'package:path/path.dart';
 
@@ -77,12 +76,12 @@ Color obsecureColor1 = Colors.black;
   }
 
   Future getImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    File image = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 78);
     print("before compress " + image.lengthSync().toString());
-    while (image.lengthSync() > 2097152) {
-      await CompressImage.compress(imageSrc: image.path, desiredQuality: 80);
-//      print("compressed " + image.lengthSync().toString());
-    }
+//    while (image.lengthSync() > 2097152) {
+//      await CompressImage.compress(imageSrc: image.path, desiredQuality: 80);
+////      print("compressed " + image.lengthSync().toString());
+//    }
 
     setState(() {
       _image = image;

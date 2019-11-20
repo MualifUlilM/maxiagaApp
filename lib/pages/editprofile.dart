@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:maxiaga/pages/login.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:compressimage/compressimage.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:maxiaga/main.dart';
@@ -81,12 +80,8 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future getImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.camera);
-//    print("before compress " + image.lengthSync().toString());
-    while (image.lengthSync() > 2097152) {
-      await CompressImage.compress(imageSrc: image.path, desiredQuality: 80);
-//      print("compressed " + image.lengthSync().toString());
-    }
+    File image = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 78);
+    print("before compress " + image.lengthSync().toString());
 
     setState(() {
       _image = image;
@@ -129,7 +124,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: _photo == null ? AssetImage('lib/assets/images/avatar.png'): NetworkImage(_photo),
+                    backgroundImage: _image == null ? NetworkImage(_photo):FileImage(_image),
                     radius: 50,
                     backgroundColor: Colors.grey[200],
                   ),
