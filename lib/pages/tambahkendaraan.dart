@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:maxiaga/main.dart';
+
 
 class TambahKendaraan extends StatefulWidget {
   String token;
-  TambahKendaraan({@required this.token});
+  Position location;
+  TambahKendaraan({@required this.token, this.location});
   @override
   _TambahKendaraanState createState() => _TambahKendaraanState();
 }
@@ -23,7 +28,10 @@ class _TambahKendaraanState extends State<TambahKendaraan> {
   TextEditingController _tahunController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  SharedPreferences preferences;
+
   _postKendaraan(String jenis, String merk, String brand,String tahun, String token)async{
+    preferences = await SharedPreferences.getInstance();
     var res = await http.post('http://maxiaga.com/backend/api/post_add_kendaraan', body: {
       'type':jenis,
       'merk':merk,
@@ -34,11 +42,22 @@ class _TambahKendaraanState extends State<TambahKendaraan> {
     var jsonRes;
     print(res.statusCode);
     if (res.statusCode == 200){
+
       jsonRes = json.decode(res.body);
       print(jsonRes);
+      preferences.setStringList('kendaraan', _mapKendaraanData(jsonRes['data']));
       return jsonRes;
     }else{
       throw Exception('Cannot Post data');
+    }
+  }
+
+  List<String> _mapKendaraanData(List<dynamic> kendaraan) {
+    try {
+      var res = kendaraan.map((v)=>json.encode(v)).toList();
+      return res;
+    }catch(err){
+      return [];
     }
   }
 
@@ -185,7 +204,8 @@ class _TambahKendaraanState extends State<TambahKendaraan> {
                     print('terkesekusi');
                     if(_formKey.currentState.validate()){
                       _postKendaraan(valueKendaraan, _merkController.text, _brandController.text, _tahunController.text, widget.token);
-                      Navigator.of(context).pop();
+//                      Navigator.of(context).pop(context);
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>MyHomePage(locationNow: widget.location,index: 0,)), (Route<dynamic> route)=>false);
                     }
 //                _postKendaraan(valueKendaraan, _merkController.text, _brandController.text,'${_tahunController.text}', widget.token);
                     print('Tidak Tereksekusi');

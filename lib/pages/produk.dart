@@ -76,12 +76,7 @@ class _ProdukState extends State<Produk> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("MAXIAGA",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
-        ),
+        title: Image.asset('lib/assets/images/maxiaga_putih.png', scale: 20,),
 
         centerTitle: true,
         elevation: 0.0,

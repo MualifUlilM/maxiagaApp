@@ -186,7 +186,7 @@ Future<Position> _getLocation() async{
         body: TabBarView(
           // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            Home(location: widget.locationNow,token: _token,name: _name,photo: _photo,email: _email,kendaraan: _kendaraan, kota: _kota, gender: _gender, phone: _phone,),
+            Home(location: _currentPosition,token: _token,name: _name,photo: _photo,email: _email,kendaraan: _kendaraan, kota: _kota, gender: _gender, phone: _phone,),
     Produk( location: _currentPosition,token: _token,),
     Riwayat(_token),
     Konsultasi(),

@@ -101,6 +101,7 @@ signIn(String email, pass, Position location)async{
       preferences.setString("phone", jsonRes['phone']);
       preferences.setString("gender", jsonRes['gender']);
       preferences.setString("kota", jsonRes['kota']);
+      preferences.setString("phone", jsonRes['phone']);
 
        preferences.setStringList('kendaraan', _mapKendaraanData(jsonRes['kendaraan']));
 //      preferences.setStringList("kendaraan", kendaraan);
@@ -263,7 +264,7 @@ signIn(String email, pass, Position location)async{
                       FlatButton(
                         child: Text("Belum Punya Akun?"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Register()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Register(location:widget.location)));
                         },
                       )
                     ],

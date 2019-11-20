@@ -2,11 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:compressimage/compressimage.dart';
+import 'package:maxiaga/pages/login.dart';
+import 'package:path/path.dart';
 
 class Register extends StatefulWidget {
+  Position location;
+  Register({this.location});
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -18,9 +25,11 @@ class _RegisterState extends State<Register> {
   final _passwordlController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
   final _kotaController = TextEditingController();
+  final _phoneController = TextEditingController();
+  String dropdownValue = 'Laki-Laki';
   
   Color obsecureColor = Colors.black;
-
+  Dio dio = new Dio();
   File _image;
 
   bool _obsecure = true;
@@ -44,26 +53,41 @@ Color obsecureColor1 = Colors.black;
     });
   }
 
-  Future _postRegister(String name, File photo, String email, String password, String confirm) async {
+  Future _postRegister(String name, File photo, String email, String password, String confirm, String kota, String phone, String gender) async {
 
-    String baseImage64 = base64Encode(photo.readAsBytesSync());
-
-    var res = await http.post('http://maxiaga.com/backend/api/post_signup',body: {
+    FormData formData = FormData.fromMap({
       'name': name,
-      'photo':baseImage64,
+      'photo':await MultipartFile.fromFile(photo.path,
+          filename: basename(photo.path)),
+      'kota':kota,
+      'gender':gender,
+      'phone':phone,
       'email':email,
       'password':password,
       'password_confirmation':confirm,
     });
+    print(formData.fields);
+    var res = await dio.post('http://maxiaga.com/backend/api/post_signup', data:formData);
+
     var jsonRes;
     print('executed');
-  if (res.statusCode == 200) {
-    jsonRes = json.decode(res.body);
-    print(jsonRes);
-  } else {
-    throw Exception('Cannot Post Data');
+    print(res);
+    return res;
+
   }
 
+  Future getImage() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    print("before compress " + image.lengthSync().toString());
+    while (image.lengthSync() > 2097152) {
+      await CompressImage.compress(imageSrc: image.path, desiredQuality: 80);
+//      print("compressed " + image.lengthSync().toString());
+    }
+
+    setState(() {
+      _image = image;
+      print(_image);
+    });
   }
 
   @override
@@ -130,12 +154,8 @@ Color obsecureColor1 = Colors.black;
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               IconButton(icon: Icon(Icons.camera_alt, size: 50,),onPressed: ()async{
-    Navigator.of(context).pop();
-                var image = await ImagePicker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      _image = image;
-    });
+                Navigator.of(context).pop();
+                getImage();
               },),
               IconButton(icon: Icon(Icons.image, size: 50,),onPressed: ()async{
                 Navigator.of(context).pop();
@@ -183,11 +203,44 @@ Color obsecureColor1 = Colors.black;
                     ),
                   ),
                   Container(
+                    width: double.infinity,
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: dropdownValue == 'L'? 'Laki-Laki':'Perempuan',
+                          items: <String>['Laki-Laki', 'Perempuan'].map((String value) {
+                            return new DropdownMenuItem<String>(
+                              value: value,
+                              child: new Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              if(value == 'Laki-Laki'){
+                                dropdownValue = 'L';
+                              }else{
+                                dropdownValue = 'P';
+                              }
+                              print(dropdownValue);
+                            });
+                          },
+                        ),),
+                  ),
+                  Divider(thickness: 1,color: Colors.grey,),
+                  Container(
                     child: TextFormField(
                       controller: _kotaController,
                       decoration: InputDecoration(labelText: 'Kota', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                       validator: (val){
                         return val.isEmpty ? 'Kota Kosong':null;
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: TextFormField(
+                      controller: _phoneController,
+                      decoration: InputDecoration(labelText: 'No.HP', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      validator: (val){
+                        return val.isEmpty ? 'Nomor Handphone Kosong':null;
                       },
                     ),
                   ),
@@ -248,9 +301,8 @@ Color obsecureColor1 = Colors.black;
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             print(_image);
-                            _postRegister(_nameController.text, _image, _emailController.text, _passwordlController.text, _passwordConfirmationController.text).then((value){
-                              print(value['api_status']);
-                            });
+                            _postRegister(_nameController.text, _image, _emailController.text, _passwordlController.text, _passwordConfirmationController.text, _kotaController.text, _phoneController.text, dropdownValue);
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>Login(widget.location)), (Route<dynamic> route)=>false);
                           }
                         },
                       )),

@@ -44,6 +44,7 @@ dependencies:
   flutter_html_textview:
   image_downloader:
   image_picker_saver:
+  compressimage:
   flutter_redux:
   dio:
 

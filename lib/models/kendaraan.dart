@@ -1,9 +1,9 @@
 class Kendaraan{
-  int id;
-  String type;
-  String merk;
-  String brand;
-  String tahun;
+  var id;
+  var type;
+  var merk;
+  var brand;
+  var tahun;
 
 //  Kendaraan(this.id, this.type, this.merk, this.brand, this.tahun);
   Kendaraan.fromJson(Map<String, dynamic> json){

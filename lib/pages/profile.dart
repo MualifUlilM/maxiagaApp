@@ -7,6 +7,9 @@ import 'package:maxiaga/pages/tambahkendaraan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:maxiaga/pages/login.dart';
 import 'splashlogout.dart';
+import 'dart:convert';
+
+
 
 class Profile extends StatefulWidget {
   Position location;
@@ -21,21 +24,54 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   SharedPreferences preferences;
-  
+
+  var _kendaraan;
+  String _name, _email, _photo, _gender, _kota, _phone;
+
   void setPreference() async {
-    // preferences = await SharedPreferences.getInstance();
+     preferences = await SharedPreferences.getInstance();
+     setState(() {
+       _kendaraan = _decodeTodoData(preferences.getStringList('kendaraan'));
+       _name = preferences.getString('name');
+       _email = preferences.getString('email');
+       _gender = preferences.getString('gender');
+       _kota = preferences.getString('kota');
+       _phone = preferences.getString('phone');
+       _photo = preferences.getString('photo');
+     });
     // name = preferences.getString('name');
     // email = preferences.getString('email');
-  
+    print(_phone);
+    print(_photo);
+
   }
 
   @override
   void initState(){
     // TODO: implement initState
+    print('Executed');
     super.initState();
     setPreference();
-    print(widget.kendaraan);
-    }
+    print('ini kendaraan $_kendaraan');
+//    print(widget.kendaraan);
+  }
+
+  _decodeTodoData(List<String> todos) {
+    print('Executed');
+    var result = todos.map((v) => json.decode(v)).toList();
+    //Transforming the Json into Array<Todo>
+    print(result);
+    var todObjects = result.map((v) => Kendaraan.fromJson(v));
+    print(result);
+    return result.asMap();
+  }
+
+
+  Widget _buildListKendaraan(){
+   return Container();
+
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -66,7 +102,7 @@ class _ProfileState extends State<Profile> {
               elevation: 0,
               child: Center(child: Icon(Icons.edit, color: Colors.white,)),
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfile()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfile(location: widget.location,)));
               },
             ),
           ),
@@ -159,7 +195,9 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TambahKendaraan(token: widget.token,)));
+                    print(_kendaraan);
+                    setPreference();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TambahKendaraan(token: widget.token,location: widget.location,)));
                   },
                 ),
               ),
@@ -167,32 +205,18 @@ class _ProfileState extends State<Profile> {
           ),
           ),
           Container(
-            // padding: EdgeInsets.only(bottom: 50),
+            // margin : EdgeInsets.only(bottom: 50),
             child: Expanded(
-            child: ListView.separated(
-            separatorBuilder: (BuildContext context, int index)=>Divider(color: Colors.white,),
-            itemCount: widget.kendaraan.length,
-            // shrinkWrap: true,
-            itemBuilder: (context, int index){
-              return Container(
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(right: 30),
-                      width: 30,
-                      child: widget.kendaraan[index]['type'] == '1' ? Image.asset('lib/assets/images/motorputih.png',scale: 3,) : Image.asset('lib/assets/images/mobilputih.png',scale: 3,),
-                    ),
-                    Text(widget.kendaraan[index]['brand'],style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  // fontWeight: FontWeight.bold
-                ),),
-                  ],
-                )
-              );
-            },
-          ),
+              child: ListView.separated(
+                  itemBuilder: (context, int index){
+                    return FlatButton(onPressed:null,
+                        child: ListTile(
+                          leading: _kendaraan[index]['type'] == '1'? Image.asset('lib/assets/images/motorputih.png',scale: 3,) : Image.asset('lib/assets/images/mobilputih.png',scale: 3,),
+                          title: Text('${_kendaraan[index]['brand']}', style: TextStyle(color: Colors.white, fontSize: 20),),
+                        ));
+                  },
+                  separatorBuilder: (context, index)=>Divider(color: Colors.white,),
+                  itemCount: _kendaraan.length),
           ),
           )
         ],
@@ -209,20 +233,20 @@ class _ProfileState extends State<Profile> {
                 children: <Widget>[
                   CircleAvatar(
                     // backgroundImage: AssetImage('lib/assets/images/avatar.png'),
-                    backgroundImage: NetworkImage(widget.photo),
+                    backgroundImage: NetworkImage(_photo),
                     radius: 50,
                     backgroundColor: Colors.transparent,
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                    child: Text("${widget.name}", style: TextStyle(
+                    child: Text("${_name}", style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold
                     ),),
                   ),
                   Container(
-                    child: Text("${widget.email}", style: TextStyle(
+                    child: Text("${_email}", style: TextStyle(
                       color: Colors.white,
                       fontSize: 14
                     ),),
@@ -249,7 +273,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     Container(
                       padding: EdgeInsets.only(top:5),
-                      child: Text("${widget.kota}", style: TextStyle(
+                      child: Text("${_kota}", style: TextStyle(
                         fontSize: 16
                       ),),
                     ),
@@ -263,9 +287,11 @@ class _ProfileState extends State<Profile> {
                     ),
                     Container(
                       padding: EdgeInsets.only(top:5),
-                      child: Text("${widget.phone}", style: TextStyle(
+                      child:_phone != null ? Text("${_phone}", style: TextStyle(
                         fontSize: 18
-                      ),),
+                      ),) : Text("-", style: TextStyle(
+                fontSize: 18
+            ),),
                     ),
                     // RaisedButton(
                     //   child: Text("Log Out"),

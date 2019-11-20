@@ -429,7 +429,7 @@ class _HomeState extends State<Home> {
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     Text(
-                      "${widget.name}",
+                      "${name}",
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
                   ],
@@ -452,7 +452,8 @@ class _HomeState extends State<Home> {
   Container _getCard() {
     List<Image> _icon = [
       Image.asset('lib/assets/images/servis.png'),
-      Image.asset('lib/assets/images/aki.png'),
+//      Image.asset('lib/assets/images/aki.png'),
+      Image.asset('lib/assets/images/oli.png'),
       Image.asset('lib/assets/images/oli.png'),
       Image.asset('lib/assets/images/ban.png'),
     ];
@@ -473,7 +474,7 @@ class _HomeState extends State<Home> {
 
     ];
 
-    List<String> menu = ["Servis", "Aki", "Bensin", "Ban"];
+    List<String> menu = ["Servis", "Oli", "Bensin", "Ban"];
 
     return Container(
         margin: EdgeInsets.fromLTRB(
