@@ -428,7 +428,8 @@ class _HomeState extends State<Home> {
                       "Hello...",
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                    Text(
+                    name == null ? Text('')
+                    : Text(
                       "${name}",
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
@@ -452,9 +453,8 @@ class _HomeState extends State<Home> {
   Container _getCard() {
     List<Image> _icon = [
       Image.asset('lib/assets/images/servis.png'),
-//      Image.asset('lib/assets/images/aki.png'),
-      Image.asset('lib/assets/images/oli.png'),
-      Image.asset('lib/assets/images/oli.png'),
+      Image.asset('lib/assets/images/oli.png',),
+      Image.asset('lib/assets/images/bensin.png'),
       Image.asset('lib/assets/images/ban.png'),
     ];
 
