@@ -366,22 +366,36 @@ Color obsecureColor1 = Colors.black;
                                 if (_formKey.currentState.validate()) {
                                   showDialog(context: context,
                                       builder: (BuildContext context){
-                                        return
-                                          AlertDialog(
-                                          content: Container(
-                                              height: MediaQuery.of(context).size.height / 10,
-                                              child:Column(
-                                           children: <Widget>[
-                                             CircularProgressIndicator(),
-                                             SizedBox(height: 10,),
-                                             Text('Tunggu Sebentar...')
-                                           ],
-                                          )
-                                          )
+                                    if(_image == null){
+                                      return AlertDialog(
+                                        content: Text('Harap masukkan gambar'),
+                                        actions: <Widget>[
+                                          FlatButton(onPressed: (){
+                                            Navigator.pop(context);
+                                          },
+                                              child: Text('Ok'))
+                                        ],
+                                      );
+                                    } else {
+                                      _postRegister(name: _nameController.text, gender: dropdownValue,email: _emailController.text, password: _passwordlController.text,photo: _image, kota: _kotaController.text, phone: _phoneController.text,context: context, confirm: _passwordConfirmationController.text);
+                                      return
+                                        AlertDialog(
+                                            content: Container(
+                                                height: MediaQuery.of(context).size.height / 10,
+                                                child:Column(
+                                                  children: <Widget>[
+                                                    CircularProgressIndicator(),
+                                                    SizedBox(height: 10,),
+                                                    Text('Tunggu Sebentar...')
+                                                  ],
+                                                )
+                                            )
                                         );
+
+                                    }
                                       }
                                   );
-                                  _postRegister(name: _nameController.text, gender: dropdownValue,email: _emailController.text, password: _passwordlController.text,photo: _image, kota: _kotaController.text, phone: _phoneController.text,context: context, confirm: _passwordConfirmationController.text);
+
                                 }
                               },
                             )),
