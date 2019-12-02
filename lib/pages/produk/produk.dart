@@ -11,8 +11,8 @@ import 'package:http/http.dart' as http;
 
 
 import 'package:maxiaga/pages/Maps.dart';
-import 'package:maxiaga/pages/riwayat.dart';
-import 'package:maxiaga/pages/spbuproduk.dart';
+import 'package:maxiaga/pages/history/riwayat.dart';
+import 'package:maxiaga/pages/produk/spbuproduk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Produk extends StatefulWidget {

@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maxiaga/assets/maxcolor.dart';
 import 'package:maxiaga/main.dart';
-import 'package:maxiaga/pages/riwayat.dart';
+import 'package:maxiaga/pages/history/riwayat.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 // import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
@@ -38,6 +39,7 @@ class _OrderBensinState extends State<OrderBensin> {
     var first = adresses.first;
     var res = await http.post('http://maxiaga.com/backend/api/post_order',body: {
       'token': preferences.getString('token'),
+      "id_mx_ms_category_service": '3',
       'id_mx_ms_outlets':'1',
       'address':first.addressLine,
       'detail_address': 'Sint adipisicing esse ea minim excepteur.',
@@ -94,7 +96,7 @@ class _OrderBensinState extends State<OrderBensin> {
       floatingActionButton: Container(
         margin: EdgeInsets.all(10),
         child: RaisedButton(
-          color: Colors.red,
+          color: MaxColor.merah,
           child: Container(
             height: 60,
             child: Center(

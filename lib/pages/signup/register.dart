@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:maxiaga/pages/login.dart';
+import 'package:maxiaga/assets/maxcolor.dart';
+import 'package:maxiaga/pages/login/login.dart';
 import 'package:path/path.dart';
 
 class Register extends StatefulWidget {
@@ -25,7 +26,7 @@ class _RegisterState extends State<Register> {
   final _passwordConfirmationController = TextEditingController();
   final _kotaController = TextEditingController();
   final _phoneController = TextEditingController();
-  String dropdownValue = 'Laki-Laki';
+  String dropdownValue = 'L';
 
   Color obsecureColor = Colors.black;
   Dio dio = new Dio();
@@ -37,9 +38,9 @@ class _RegisterState extends State<Register> {
   void _setObsecure(){
     setState(() {
       _obsecure = !_obsecure;
-      if(obsecureColor == Colors.red){
+      if(obsecureColor == MaxColor.merah){
         obsecureColor = Colors.black;
-      }else{obsecureColor = Colors.red;}
+      }else{obsecureColor = MaxColor.merah;}
     });
   }
 
@@ -48,9 +49,9 @@ Color obsecureColor1 = Colors.black;
   void _setObsecure1(){
     setState(() {
       _obsecure1 = !_obsecure1;
-      if(obsecureColor1 == Colors.red){
+      if(obsecureColor1 == MaxColor.merah){
         obsecureColor1 = Colors.black;
-      }else{obsecureColor1 = Colors.red;}
+      }else{obsecureColor1 = MaxColor.merah;}
     });
   }
 
@@ -141,11 +142,6 @@ Color obsecureColor1 = Colors.black;
   Future getImage() async {
     File image = await ImagePicker.pickImage(source: ImageSource.camera, imageQuality: 78);
     print("before compress " + image.lengthSync().toString());
-//    while (image.lengthSync() > 2097152) {
-//      await CompressImage.compress(imageSrc: image.path, desiredQuality: 80);
-////      print("compressed " + image.lengthSync().toString());
-//    }
-
     setState(() {
       _image = image;
       print(_image);
@@ -156,7 +152,7 @@ Color obsecureColor1 = Colors.black;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      backgroundColor: Colors.red,
+      backgroundColor: MaxColor.merah,
       body: SingleChildScrollView(
         // physics: NeverScrollableScrollPhysics(),
         child: Stack(
@@ -168,7 +164,7 @@ Color obsecureColor1 = Colors.black;
                   padding: EdgeInsets.only(top: 20),
                   height: MediaQuery.of(context).size.height / 4,
                   decoration: BoxDecoration(
-                    // color: Colors.red
+                    // color: MaxColor.merah
                   ),
                   child: Center(
                     child: Text(
@@ -182,7 +178,7 @@ Color obsecureColor1 = Colors.black;
                 ),
                 Container(
                   padding: EdgeInsets.all(20),
-                  height: MediaQuery.of(context).size.height / 1,
+                  // height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -199,14 +195,14 @@ Color obsecureColor1 = Colors.black;
                           child: Stack(
                             children: <Widget>[
                               CircleAvatar(
-                                backgroundColor: Colors.red,
+                                backgroundColor: MaxColor.merah,
                                 backgroundImage: _image != null ? FileImage(_image):AssetImage('lib/assets/images/avatar.png'),
                                 radius: 50,
                               ),
                               Positioned(
                                 top: 0,
                                 right: 0,
-                                child: Container(height: 50, width: 50, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white, border:Border.all(color: Colors.red)),child: Center(child: IconButton(icon: Icon(Icons.add_a_photo, color: Colors.red,),onPressed: (){
+                                child: Container(height: 50, width: 50, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white, border:Border.all(color: MaxColor.merah)),child: Center(child: IconButton(icon: Icon(Icons.add_a_photo, color: MaxColor.merah,),onPressed: (){
                                   showDialog<void>(
                                     context: context,
                                     barrierDismissible: false, // user must tap button!
@@ -260,6 +256,7 @@ Color obsecureColor1 = Colors.black;
                         Container(
                           child: TextFormField(
                             controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                             validator: (val){
                               return val.isEmpty ? 'Email Kosong':null;
@@ -302,6 +299,7 @@ Color obsecureColor1 = Colors.black;
                         Container(
                           child: TextFormField(
                             controller: _phoneController,
+                            keyboardType:TextInputType.phone,
                             decoration: InputDecoration(labelText: 'No.HP', labelStyle: TextStyle(fontWeight: FontWeight.bold)),
                             validator: (val){
                               return val.isEmpty ? 'Nomor Handphone Kosong':null;
@@ -350,7 +348,7 @@ Color obsecureColor1 = Colors.black;
                             margin: EdgeInsets.only(top: 30),
                             height: 60,
                             decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: MaxColor.merah,
                                 borderRadius: BorderRadius.circular(5)),
                             child: FlatButton(
                               child: Center(

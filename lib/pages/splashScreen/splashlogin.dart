@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:maxiaga/assets/maxcolor.dart';
 import 'package:maxiaga/main.dart';
 import 'package:maxiaga/models/spbu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'login.dart';
+import 'package:maxiaga/pages/login/login.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -47,7 +48,7 @@ class _SplashLogState extends State<SplashLogin> {
     return SplashScreen(
       seconds: 3,
       navigateAfterSeconds: MyHomePage(locationNow: _currentPosition,index: 0,),
-      backgroundColor: Colors.red,
+      backgroundColor: MaxColor.merah,
       styleTextUnderTheLoader: new TextStyle(),
       loaderColor: Colors.white,
       // loadingText: Text("Aku Suka Maxiaga ...",style: TextStyle(

@@ -27,6 +27,11 @@ class SPBU{
   String id_regency;
   String id_district;
   double distance;
+  int is_service;
+  int is_oil;
+  int is_fuel;
+  int is_tire;
+
 
   SPBU(data){
     id = data['id'];
@@ -38,6 +43,10 @@ class SPBU{
     id_regency = data['id_regency'].toString();
     id_district = data['id_district'].toString();
     distance = data['distance'];
+    is_service = data['is_service'];
+    is_oil = data['is_oil'];
+    is_fuel = data['is_fuel'];
+    is_tire = data['is_tire'];
   }
 
 }

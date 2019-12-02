@@ -5,13 +5,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:maxiaga/assets/maxcolor.dart';
 //import 'package:maxiaga/models/userdata.dart';
 import 'package:maxiaga/models/kendaraan.dart';
-import 'package:maxiaga/pages/home.dart';
-import 'package:maxiaga/pages/login.dart';
-import 'package:maxiaga/pages/riwayat.dart';
-import 'package:maxiaga/pages/produk.dart';
-import 'package:maxiaga/pages/konsultasi.dart';
+import 'package:maxiaga/pages/home/home.dart';
+import 'package:maxiaga/pages/login/login.dart';
+import 'package:maxiaga/pages/history/riwayat.dart';
+import 'package:maxiaga/pages/login/loginpage.dart' as prefix0;
+import 'package:maxiaga/pages/produk/produk.dart';
+import 'package:maxiaga/pages/konsultasi/konsultasi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:maxiaga/models/spbu.dart';
@@ -21,8 +23,22 @@ import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MyApp());
 
+
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+  Map<int, Color> color ={
+    50:Color.fromRGBO(210,34,34, .1),
+    100:Color.fromRGBO(210,34,34, .2),
+    200:Color.fromRGBO(210,34,34, .3),
+    300:Color.fromRGBO(210,34,34, .4),
+    400:Color.fromRGBO(210,34,34, .5),
+    500:Color.fromRGBO(210,34,34, .6),
+    600:Color.fromRGBO(210,34,34, .7),
+    700:Color.fromRGBO(210,34,34, .8),
+    800:Color.fromRGBO(210,34,34, .9),
+    900:Color.fromRGBO(210,34,34, 1),};
 
 
   @override
@@ -31,7 +47,10 @@ class MyApp extends StatelessWidget {
       title: 'Maxiaga',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        // primarySwatch: Colors.red,
+        primarySwatch: MaterialColor(0xFFD22222, color), 
+        primaryColor: MaterialColor(0xFFD22222, color),
+        
       ),
       home:Splash(),
       // routes: routes,
@@ -95,7 +114,7 @@ class _SplashState extends State<Splash> {
 //      ),
       image: Image.asset('lib/assets/images/maxiaga_putih.png',),
       photoSize: 120,
-      backgroundColor: Colors.red,
+      backgroundColor: MaxColor.merah,
       styleTextUnderTheLoader: new TextStyle(),
       // loaderColor: Colors.white,
       // loadingText: Text("Aku Suka Maxiaga ...",style: TextStyle(
@@ -221,7 +240,7 @@ Future<Position> _getLocation() async{
               ),
             ],
             unselectedLabelColor: Colors.black,
-            labelColor: Colors.red,
+            labelColor: MaxColor.merah,
             indicatorColor: Colors.transparent,
           ),
         ),

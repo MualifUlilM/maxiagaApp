@@ -10,14 +10,17 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maxiaga/models/kendaraan.dart';
-import 'package:maxiaga/pages/article.dart';
-import 'package:maxiaga/pages/orderbensin.dart';
-import 'package:maxiaga/pages/profile.dart';
-import 'package:maxiaga/pages/riwayat.dart';
-import 'package:maxiaga/pages/servis.dart';
+import 'package:maxiaga/pages/article/article.dart';
+import 'package:maxiaga/pages/home/background.dart';
+import 'package:maxiaga/pages/home/buildArticle.dart';
+import 'package:maxiaga/pages/home/buildCard.dart';
+import 'package:maxiaga/pages/order/bensin/orderbensin.dart';
+import 'package:maxiaga/pages/profile/profile.dart';
+import 'package:maxiaga/pages/history/riwayat.dart';
+import 'package:maxiaga/pages/order/servis/servis.dart';
 import 'package:maxiaga/models/spbu.dart';
 import 'package:http/http.dart' as http;
-import 'package:maxiaga/pages/tambalban.dart';
+import 'package:maxiaga/pages/order/ban/tambalban.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
@@ -63,6 +66,8 @@ class _HomeState extends State<Home> {
   GoogleMapController mapController;
   LatLng spbuPoint;
   List<SPBU> spbu;
+  BuildArticle article = BuildArticle();
+  Background bg = Background();
 
   Geolocator geolocator = Geolocator();
   Position userLocation;
@@ -185,8 +190,22 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Stack(
                   children: <Widget>[
-                    _getBackground(),
-                    _getCard(),
+                    bg.getBackground(
+                      context,
+                      _currentPosition,
+                      email,
+                      name,
+                      photo,
+                      token,
+                      gender,
+                      kota,
+                      phone,
+                      kendaraan
+                    ),
+                    BuildCard(
+                      location: widget.location == null ? _currentPosition : widget.location,
+                      token: widget.token,
+                    )
                   ],
                 ),
                 SizedBox(
@@ -299,154 +318,12 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                buildArticle(context),
+                article.buildArticle(context)
               ],
             ),
           ),
         ));
       },
-    );
-  }
-  Future _getArticle()async{
-    var res = await http.get('http://energibangsa.id/wp-json/wp/v2/posts?per_page=5');
-    var jsonData = json.decode(res.body);
-
-    if (res.statusCode == 200) {
-      // print(jsonData);
-      return jsonData;
-    } else {
-      throw Exception('Cannot load data');
-    }
-  }
-
-  SizedBox buildArticle(BuildContext context) {
-    return SizedBox(
-                  height: MediaQuery.of(context).size.height / 2.5,
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).size.height / 50),
-                    child: FutureBuilder(
-                      future: _getArticle(),
-                      builder: (context, snapshot){
-                          // print(snapshot.data[1]['title']);
-                        // print();
-                        if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-                          return CarouselSlider(
-                      autoPlay: true,
-                      enableInfiniteScroll: true,
-                      items: List.generate(5, (i) {
-                        return Container(
-                            height: 300,
-                            width: 600,
-                            margin: EdgeInsets.all(10),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),boxShadow: [BoxShadow(offset: Offset(1, 2), color: Colors.grey[300], blurRadius: 10)]),
-                            child: FlatButton(
-                              child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    height: MediaQuery.of(context).size.height / 6,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),color: Colors.white,image: DecorationImage(image: NetworkImage('${snapshot.data[i]['jetpack_featured_media_url']}'), alignment: Alignment.topCenter, fit: BoxFit.cover)),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    height: MediaQuery.of(context).size.height / 10,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
-                                    child: Text('${snapshot.data[i]['title']['rendered']}'),
-                                  )
-                                ],
-                              ),
-                            ),
-                            onPressed: () async {
-//                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Article("${snapshot.data[i]['title']['rendered']}", "${snapshot.data[i]['jetpack_featured_media_url']}", "${snapshot.data[i]['content']['rendered']}")));
-                                if(await canLaunch('${snapshot.data[i]['link']}')){
-                                  await launch('${snapshot.data[i]['link']}');
-                                }
-                            },
-                            )
-                          );
-                      }),
-                    );
-                        } else {
-                          return Center(child: Text('Loading...'),);
-                        }
-                      },
-                    ),
-                  ));
-  }
-
-
-  ImageProvider buildImg(){
-    if(photo == null){
-      return AssetImage('lib/assets/images/avatar.png');
-    }else{
-      return NetworkImage(photo);
-    }
-  }
-
-  Container _getBackground() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width / 20,
-        MediaQuery.of(context).size.height / 10,
-        MediaQuery.of(context).size.width / 20,
-        MediaQuery.of(context).size.height / 6,
-      ),
-      height: MediaQuery.of(context).size.height / 2,
-      decoration: BoxDecoration(color: Colors.red),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-//          Text(
-//            "MAXIAGA",
-//            style: TextStyle(fontSize: 28, color: Colors.white),
-//          ),
-        Container(
-          height: 50,
-
-          child: Image.asset('lib/assets/images/maxiaga_putih.png',),
-        ),
-          FlatButton(
-            onPressed: () {
-              print(widget.email);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Profile(widget.location, widget.email, widget.name, widget.photo, widget.token, widget.gender, widget.kota, widget.phone, widget.kendaraan)));
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Hello...",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                    name == null ? Text('')
-                    : Text(
-                      "${name}",
-                      style: TextStyle(fontSize: 24, color: Colors.white),
-                    ),
-                  ],
-                ),
-                CircleAvatar(
-                  backgroundImage: buildImg(),
-                  // backgroundImage: widget.photo.isEmpty?AssetImage('lib/assets/images/avatar.png'):NetworkImage(widget.photo) ,
-                  radius: MediaQuery.of(context).size.width / 10,
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 

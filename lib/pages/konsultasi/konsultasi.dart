@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:maxiaga/pages/konsultasi_detail.dart';
-import 'package:maxiaga/pages/riwayat.dart';
-import 'package:maxiaga/pages/tambahKonsultasi.dart';
+import 'package:maxiaga/pages/konsultasi/konsultasi_detail.dart';
+import 'package:maxiaga/pages/history/riwayat.dart';
+import 'package:maxiaga/pages/konsultasi/tambahKonsultasi.dart';
 
 class Konsultasi extends StatefulWidget {
   @override

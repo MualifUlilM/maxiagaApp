@@ -1,12 +1,13 @@
 import 'package:expandable_card/expandable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:maxiaga/assets/maxcolor.dart';
 import 'package:maxiaga/models/kendaraan.dart';
-import 'package:maxiaga/pages/editprofile.dart';
-import 'package:maxiaga/pages/tambahkendaraan.dart';
+import 'package:maxiaga/pages/profile/editprofile.dart';
+import 'package:maxiaga/pages/profile/tambahkendaraan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:maxiaga/pages/login.dart';
-import 'splashlogout.dart';
+import 'package:maxiaga/pages/login/login.dart';
+import '../splashScreen/splashlogout.dart';
 import 'dart:convert';
 
 
@@ -89,7 +90,7 @@ class _ProfileState extends State<Profile> {
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        // backgroundColor: MaxColor.merah,
         elevation: 0.0,
         actions: <Widget>[
           Container(
@@ -164,9 +165,9 @@ class _ProfileState extends State<Profile> {
       body: ExpandableCardPage(
         expandableCard: ExpandableCard(
         hasRoundedCorners: true,
-        minHeight: 205,
-        backgroundColor: Colors.red,
-        // maxHeight: 500,
+        minHeight: 185,
+        backgroundColor: MaxColor.merah,
+        maxHeight: MediaQuery.of(context).size.height,
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 20),
@@ -223,12 +224,13 @@ class _ProfileState extends State<Profile> {
       ),
       page: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
+        // physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           children: <Widget>[
             Container(
               height: 200,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(color: Colors.red),
+              decoration: BoxDecoration(color: MaxColor.merah),
               child: Column(
                 children: <Widget>[
                   CircleAvatar(
